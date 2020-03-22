@@ -2,7 +2,7 @@
 
 function search() { // Formata os primeiros dados para realizar a pesquisa.
 
-    let key = ''; // CHAVE GOOGLE API
+    let key = 'AIzaSyCpMbb74LSDVZ9JXSLqikQlI1H8vmZJ0QU'; // CHAVE GOOGLE API
     let value = oneForm.searchInput.value; // DADOS DO FORMULARIO PARA REALIZAR PESQUISA SEM FORMATAR
     let search = ''; // INICIA A VARIAVEL QUE RECEBERA AS INFORMAÇÕES PARA PESQUISA FORMATADAS
 
