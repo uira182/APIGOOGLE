@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCT</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/fontawesome/css/all.min.css">
+    <script src="./assets/js/jquery/jquery.min.js"></script>
+    <script src="./assets/fontawesome/js/all.js"></script>
+</head>
+
+<body>
+    <div style="background-color:rgba(0,128,0,0.3);" class="container border rounded mt-2 p-0 p-md-0">
+        <div class="row pt-2 pb-2 m-0 p-0">
+            <div class="col-md-12">
+                <p class="text-center text-white h3">
+                    <img src="./assets/img/tendencias.svg" width="90" alt="Tendencias"> Georreferenciamento
+                </p>
+            </div>
+        </div>
+        <div class="row pb-3 m-0 p-0">
+            <div class="col-md-12">
+                <form name="oneSearch" action="">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Pesquisar</span>
+                        </div>
+                        <input id="srcInp" name="searchInput" type="text" class="form-control" placeholder="Logradouro, CEP, Lat e Log ou Empresa">
+                        <div class="input-group-append">
+                            <button name="searchButton" class="btn btn-success" type="submit">
+                            <i class="fa fa-map-marker-alt"></i>
+                        </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row m-0 p-0">
+            <div class="col-md-12">
+                <table class="table table-dark table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">End</th>
+                            <th class="text-center">CEP</th>
+                            <th class="text-center">LAT</th>
+                            <th class="text-center">LOG</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataSearch"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="./assets/js/search.js"></script>
+    <script src="./assets/js/dell.js"></script>
+    <script src="./assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./assets/js/popper/popper.min.js"></script>
+</body>
+
+</html>
