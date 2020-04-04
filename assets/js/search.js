@@ -1,31 +1,34 @@
 /* ***************************** FORMATAÇÃO PARA PESQUISA ******************************* */
 
-function search() { // Formata os primeiros dados para realizar a pesquisa.
+function search(oneForm) { // Formata os primeiros dados para realizar a pesquisa.
+    if (!oneForm.searchInput.value || oneForm.searchInput.value === '') {
+        alert("Insira algum dado para ser buscado");
+    } else {
+        let key = 'AIzaSyCpMbb74LSDVZ9JXSLqikQlI1H8vmZJ0QU'; // CHAVE GOOGLE API
+        let value = oneForm.searchInput.value; // DADOS DO FORMULARIO PARA REALIZAR PESQUISA SEM FORMATAR
+        let search = ''; // INICIA A VARIAVEL QUE RECEBERA AS INFORMAÇÕES PARA PESQUISA FORMATADAS
 
-    let key = 'AIzaSyCpMbb74LSDVZ9JXSLqikQlI1H8vmZJ0QU'; // CHAVE GOOGLE API
-    let value = oneForm.searchInput.value; // DADOS DO FORMULARIO PARA REALIZAR PESQUISA SEM FORMATAR
-    let search = ''; // INICIA A VARIAVEL QUE RECEBERA AS INFORMAÇÕES PARA PESQUISA FORMATADAS
+        // ESTE LOOP VAI LER TODOS OS DADOS QUE SERÃO PESQUISADOS E VAI REMOVER OS ESPAÇOS PARA COLOCAR -
+        // A API DO GOOGLE NÃO RECONHECE ESTAÇO ENTRE AS PALAVRAS POIS ESTA MESMA IRA NA URL DE PESQUISA
+        // UTILIZANDO UMA REQUISIÇÃO DO TIPO GET E POR ESTE MOTIVO A IMPORTANCIA DE TROCAR TODOS OS ESPAÇOS
+        // POR TRAÇOS: https://maps.googleapis.com/maps/api/geocode/json?address=exemplo-de-pesquisa-sem-espaço
 
-    // ESTE LOOP VAI LER TODOS OS DADOS QUE SERÃO PESQUISADOS E VAI REMOVER OS ESPAÇOS PARA COLOCAR -
-    // A API DO GOOGLE NÃO RECONHECE ESTAÇO ENTRE AS PALAVRAS POIS ESTA MESMA IRA NA URL DE PESQUISA
-    // UTILIZANDO UMA REQUISIÇÃO DO TIPO GET E POR ESTE MOTIVO A IMPORTANCIA DE TROCAR TODOS OS ESPAÇOS
-    // POR TRAÇOS: https://maps.googleapis.com/maps/api/geocode/json?address=exemplo-de-pesquisa-sem-espaço
+        for (let i = 0; i < value.length; i++) {
 
-    for (let i = 0; i < value.length; i++) {
+            if (value.charAt(i) != " ") { // SE NÃO ESTIVER VASIO O PONTO DE VERIFICAÇÃO
 
-        if (value.charAt(i) != " ") { // SE NÃO ESTIVER VASIO O PONTO DE VERIFICAÇÃO
+                search += value.charAt(i); // ENVIA A LETRA PARA A VARIAVEL DE PESQUISA
 
-            search += value.charAt(i); // ENVIA A LETRA PARA A VARIAVEL DE PESQUISA
-
-        } else { // SE TIVER ESPAÇO O PONTO DE VERIFICAÇÃO
-            search += '-'; // ENVIA O TRAÇO PARA A VARIAVEL DE PESQUISA
+            } else { // SE TIVER ESPAÇO O PONTO DE VERIFICAÇÃO
+                search += '-'; // ENVIA O TRAÇO PARA A VARIAVEL DE PESQUISA
+            }
         }
+
+        // FORMATAÇÃO DA URL QUE VAI PARA A REQUISIÇÃO DE PESQUISA
+        let url = new URL('https://maps.googleapis.com/maps/api/geocode/json?address=' + search + '&key=' + key);
+
+        api(url); // ENVIA OS DADOS FORMATADOS E PRONTOS PARA A FUNÇÃO API
     }
-
-    // FORMATAÇÃO DA URL QUE VAI PARA A REQUISIÇÃO DE PESQUISA
-    let url = new URL('https://maps.googleapis.com/maps/api/geocode/json?address=' + search + '&key=' + key);
-
-    api(url); // ENVIA OS DADOS FORMATADOS E PRONTOS PARA A FUNÇÃO API
 
 }
 
@@ -38,16 +41,27 @@ function api(url) { // RECEBE OS DADOS FORMATADOS E IRA BUSCAR OS DADOS DA API
     var xhr = new XMLHttpRequest(); // CRIA O OBJETO QUE REALIZARA A CONEXAO COM A API
     xhr.open("GET", url, true); // CONFIGURA A FORMA DE COMUNICAÇÃO GET E A URL E FORMA DE RETORNO DOS DADOS
     xhr.setRequestHeader("Accept", "application/json"); // FORMA DE RETORNO DE DADOS JSON
-    xhr.onreadystatechange = function() { // REALIZA A COMUNICAÇÃO
-
+    
+    xhr.onreadystatechange = function () { // REALIZA A COMUNICAÇÃO
         // SE O RETORNO FOR CORRETO COM RESULTADO 200
-        if ((xhr.readyState == 0 || xhr.readyState == 4) && xhr.status == 200) {
+        if ((xhr.readyState == 0 || xhr.readyState == 4)) {
+            switch (xhr.status) {
+                case 200:
 
-            // EXECUTA A FUNÇÃO PREENCHE GOOGLE PARA PODER FORMATAR OS DADOS A SEREM EXIBIDOS
-            preencheGoogle(xhr.responseText);
-
+                    // EXECUTA A FUNÇÃO PREENCHE GOOGLE PARA PODER FORMATAR OS DADOS A SEREM EXIBIDOS
+                    preencheGoogle(xhr.responseText);
+                    break;
+                case 400:
+                    alert('ERRO:400 - Informações incorretas');
+                    break;
+                default:
+                    alert('Erro - Inesperado');
+                    console.log(xhr.status);
+                    break;
+            }
         }
     };
+    xhr.send();
 }
 
 /* *************************************************************************************** */
@@ -58,6 +72,7 @@ function preencheGoogle(dados) { // RECEBE OS DADOS DA COMUNICAÇÃO PARA FORMAT
 
     let search = JSON.parse(dados); // CONVERTE OS DADOS EM TEXTO JSON PARA OBJETO JSON
 
+    //console.log(search);
     // RECEBE A QUANTIDADE DE COMPONENTES RESULTANTES DA PESQUISA
     let qd = search.results[0].address_components.length;
 
@@ -95,11 +110,16 @@ function printList(endereco, cep, lat, lng) { // EXIBE OS DADOS FORMATADOS NA TA
     var htmlTable = ''; // CRIA A VARIAVEL QUE RECEBERA O CODIGO HTML PARA EXIBIR NA TABELA
 
     htmlTable = "<tr class='lineTable'>";
-    htmlTable += "<td class='text-center'>" + endereco + "</td>";
-    htmlTable += "<td class='text-center'>" + cep + "</td>";
-    htmlTable += "<td class='text-center'>" + lat + "</td>";
-    htmlTable += "<td class='text-center'>" + lng + "</td>";
-    htmlTable += "<th class='text-center'><a href='#' id='delLine'><i class='fa fa-plus-circle text-danger'></i></a></th>";
+    htmlTable += "<td class='text-left'>" + endereco + "</td>";
+    htmlTable += "<td class='text-left'>" + cep + "</td>";
+    htmlTable += "<td class='text-left'>" + lat + "</td>";
+    htmlTable += "<td class='text-left'>" + lng + "</td>";
+    htmlTable += "<th class='text-center'>";
+    htmlTable += "<a href='#' id='delLine' onclick='delRow(this.parentNode.parentNode.rowIndex)'>";
+    htmlTable += "<i class='fa fa-times-circle text-danger'>";
+    htmlTable += "</i>";
+    htmlTable += "</a>";
+    htmlTable += "</th>";
     htmlTable += "</tr>";
 
     tableSearch.innerHTML += htmlTable; // INSERE OS DADOS NA TABELA
@@ -118,15 +138,15 @@ function clearInput() { // FUNÇÃO PARA LIMPARA OS DADOS DE PESQUISA
 /* *************************************************************************************** */
 
 /* ************************************** INICIO ***************************************** */
+document.addEventListener('DOMContentLoaded', function () {
+    let oneForm = document.forms.oneSearch; // Captura do formulario de pesquisa
 
-let oneForm = document.forms.oneSearch; // Captura do formulario de pesquisa
+    oneForm.addEventListener('submit', function (e) { // Verifica se foi executado o formulario de pesquisa
+        e.preventDefault(); // Paraliza a atualização da pagina
+    });
 
-oneForm.addEventListener('submit', function(e) { // Verifica se foi executado o formulario de pesquisa
-    e.preventDefault(); // Paraliza a atualização da pagina
+    oneForm.searchButton.addEventListener('click', function () { // Verifica se foi clicado no botão de pesquisa
+        search(oneForm); // Executa a função de pesquisa
+    });
 });
-
-oneForm.searchButton.addEventListener('click', function() { // Verifica se foi clicado no botão de pesquisa
-    search(); // Executa a função de pesquisa
-});
-
 /* *************************************** FIM ****************************************** */
