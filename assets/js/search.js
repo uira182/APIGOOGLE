@@ -14,7 +14,23 @@ function search(oneForm) { // Formata os primeiros dados para realizar a pesquis
         // POR TRAÇOS: https://maps.googleapis.com/maps/api/geocode/json?address=exemplo-de-pesquisa-sem-espaço
 
         for (let i = 0; i < value.length; i++) {
-
+            if (i == 0) {
+                let r = i;
+                let ru = 0;
+                let ua = 0;
+                if (value.charAt(r) == "R" || value.charAt(r) == "r") {
+                    u = i + 1;
+                    if (value.charAt(ru) == "U" || value.charAt(ru) == "u") {
+                        a = u + 1;
+                        if (value.charAt(ua) == "A" || value.charAt(ua) == "a") {
+                            i++;
+                        }
+                        i++;
+                    }
+                    search += "Rua:";
+                    i++;
+                }
+            }
             if (value.charAt(i) != " ") { // SE NÃO ESTIVER VASIO O PONTO DE VERIFICAÇÃO
 
                 search += value.charAt(i); // ENVIA A LETRA PARA A VARIAVEL DE PESQUISA
@@ -23,7 +39,7 @@ function search(oneForm) { // Formata os primeiros dados para realizar a pesquis
                 search += '-'; // ENVIA O TRAÇO PARA A VARIAVEL DE PESQUISA
             }
         }
-
+        console.log(search);
         // FORMATAÇÃO DA URL QUE VAI PARA A REQUISIÇÃO DE PESQUISA
         let url = new URL('https://maps.googleapis.com/maps/api/geocode/json?address=' + search + '&key=' + key);
 
@@ -41,7 +57,7 @@ function api(url) { // RECEBE OS DADOS FORMATADOS E IRA BUSCAR OS DADOS DA API
     var xhr = new XMLHttpRequest(); // CRIA O OBJETO QUE REALIZARA A CONEXAO COM A API
     xhr.open("GET", url, true); // CONFIGURA A FORMA DE COMUNICAÇÃO GET E A URL E FORMA DE RETORNO DOS DADOS
     xhr.setRequestHeader("Accept", "application/json"); // FORMA DE RETORNO DE DADOS JSON
-    
+
     xhr.onreadystatechange = function () { // REALIZA A COMUNICAÇÃO
         // SE O RETORNO FOR CORRETO COM RESULTADO 200
         if ((xhr.readyState == 0 || xhr.readyState == 4)) {
@@ -72,7 +88,7 @@ function preencheGoogle(dados) { // RECEBE OS DADOS DA COMUNICAÇÃO PARA FORMAT
 
     let search = JSON.parse(dados); // CONVERTE OS DADOS EM TEXTO JSON PARA OBJETO JSON
 
-    //console.log(search);
+    console.log(search);
     // RECEBE A QUANTIDADE DE COMPONENTES RESULTANTES DA PESQUISA
     let qd = search.results[0].address_components.length;
 
@@ -110,6 +126,7 @@ function printList(endereco, cep, lat, lng) { // EXIBE OS DADOS FORMATADOS NA TA
     var htmlTable = ''; // CRIA A VARIAVEL QUE RECEBERA O CODIGO HTML PARA EXIBIR NA TABELA
 
     htmlTable = "<tr class='lineTable'>";
+    htmlTable += "<td class='text-left'></td>";
     htmlTable += "<td class='text-left'>" + endereco + "</td>";
     htmlTable += "<td class='text-left'>" + cep + "</td>";
     htmlTable += "<td class='text-left'>" + lat + "</td>";

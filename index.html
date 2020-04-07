@@ -29,7 +29,8 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">Pesquisar</span>
                         </div>
-                        <input id="srcInp" name="searchInput" type="text" class="form-control" placeholder="Logradouro, CEP, Lat e Log ou Empresa">
+                        <input id="srcInp" name="searchInput" type="text" class="form-control"
+                            placeholder="Logradouro, CEP, Lat e Log ou Empresa">
                         <div class="input-group-append">
                             <button name="searchButton" class="btn btn-success" type="submit">
                                 <i class="fa fa-map-marker-alt"></i>
@@ -37,7 +38,7 @@
                             <button class="btn btn-danger" id="myBtn" type="button">
                                 <i class="fa fa-file-csv"></i>
                             </button>
-                            <button class="btn btn-success">
+                            <button class="btn btn-success" id="dCsv">
                                 <i class="fa fa-cloud-download-alt"></i>
                             </button>
                         </div>
@@ -50,10 +51,11 @@
                 <table id="listGeo" name="listGeo" class="table table-dark table-hover">
                     <thead>
                         <tr>
-                            <th class="text-left">End</th>
+                            <th class="text-left">Id</th>
+                            <th class="text-left">Endereço</th>
                             <th class="text-left">CEP</th>
-                            <th class="text-left">LAT</th>
-                            <th class="text-left">LOG</th>
+                            <th class="text-left">Latitude</th>
+                            <th class="text-left">Longitude</th>
                             <th class="text-center">
                                 <i class="fa fa-trash"></i>
                             </th>
@@ -62,7 +64,7 @@
                     <tbody name="dataSearch" id="dataSearch"></tbody>
                 </table>
             </div>
-        </div>  
+        </div>
         <!-- The Modal -->
         <div class="modal" id="myModal">
             <div class="modal-dialog">
@@ -89,6 +91,19 @@
             </div>
         </div>
     </div>
+    <script src="./assets/js/jquery-2.2.0.min.js"></script>
+    <script src="./assets/js/jquery.TableCSVExport.js"></script>
+    <script>
+        $("#dCsv").click(function () {
+            $('#listGeo').TableCSVExport({
+                header: ['Id', 'End', 'CEP', 'LAT', 'LON'],
+                separator : ';',
+                delivery: 'download',
+                filename: 'GeoTendencias.csv'
+            });
+        });
+
+    </script>
     <script src="./assets/js/upload.js"></script>
     <!--script src="./assets/js/csv.js"></script-->
     <script src="./assets/js/search.js"></script>
