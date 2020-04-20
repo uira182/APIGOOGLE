@@ -4,7 +4,7 @@ function search(oneForm) { // Formata os primeiros dados para realizar a pesquis
     if (!oneForm.searchInput.value || oneForm.searchInput.value === '') {
         alert("Insira algum dado para ser buscado");
     } else {
-        let key = 'AIzaSyCpMbb74LSDVZ9JXSLqikQlI1H8vmZJ0QU'; // CHAVE GOOGLE API
+        let key = ''; // CHAVE GOOGLE API
         let value = oneForm.searchInput.value; // DADOS DO FORMULARIO PARA REALIZAR PESQUISA SEM FORMATAR
         let search = ''; // INICIA A VARIAVEL QUE RECEBERA AS INFORMAÇÕES PARA PESQUISA FORMATADAS
 
@@ -20,7 +20,7 @@ function search(oneForm) { // Formata os primeiros dados para realizar a pesquis
                 let ua = 0;
                 if (value.charAt(r) == "R" || value.charAt(r) == "r") {
                     u = i + 1;
-                    if (value.charAt(ru) == "U" || value.charAt(ru) == "u") {
+                    if (value.charAt(ru) == W "U" || value.charAt(ru) == "u") {
                         a = u + 1;
                         if (value.charAt(ua) == "A" || value.charAt(ua) == "a") {
                             i++;
@@ -58,7 +58,7 @@ function api(url) { // RECEBE OS DADOS FORMATADOS E IRA BUSCAR OS DADOS DA API
     xhr.open("GET", url, true); // CONFIGURA A FORMA DE COMUNICAÇÃO GET E A URL E FORMA DE RETORNO DOS DADOS
     xhr.setRequestHeader("Accept", "application/json"); // FORMA DE RETORNO DE DADOS JSON
 
-    xhr.onreadystatechange = function () { // REALIZA A COMUNICAÇÃO
+    xhr.onreadystatechange = function() { // REALIZA A COMUNICAÇÃO
         // SE O RETORNO FOR CORRETO COM RESULTADO 200
         if ((xhr.readyState == 0 || xhr.readyState == 4)) {
             switch (xhr.status) {
@@ -155,14 +155,14 @@ function clearInput() { // FUNÇÃO PARA LIMPARA OS DADOS DE PESQUISA
 /* *************************************************************************************** */
 
 /* ************************************** INICIO ***************************************** */
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     let oneForm = document.forms.oneSearch; // Captura do formulario de pesquisa
 
-    oneForm.addEventListener('submit', function (e) { // Verifica se foi executado o formulario de pesquisa
+    oneForm.addEventListener('submit', function(e) { // Verifica se foi executado o formulario de pesquisa
         e.preventDefault(); // Paraliza a atualização da pagina
     });
 
-    oneForm.searchButton.addEventListener('click', function () { // Verifica se foi clicado no botão de pesquisa
+    oneForm.searchButton.addEventListener('click', function() { // Verifica se foi clicado no botão de pesquisa
         search(oneForm); // Executa a função de pesquisa
     });
 });
