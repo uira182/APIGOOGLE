@@ -29,8 +29,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">Pesquisar</span>
                         </div>
-                        <input id="srcInp" name="searchInput" type="text" class="form-control"
-                            placeholder="Logradouro, CEP, Lat e Log ou Empresa">
+                        <input id="srcInp" name="searchInput" type="text" class="form-control" placeholder="Logradouro, CEP, Lat e Log ou Empresa">
                         <div class="input-group-append">
                             <button name="searchButton" class="btn btn-success" type="submit">
                                 <i class="fa fa-map-marker-alt"></i>
@@ -94,15 +93,14 @@
     <script src="./assets/js/jquery-2.2.0.min.js"></script>
     <script src="./assets/js/jquery.TableCSVExport.js"></script>
     <script>
-        $("#dCsv").click(function () {
+        $("#dCsv").click(function() {
             $('#listGeo').TableCSVExport({
                 header: ['Id', 'End', 'CEP', 'LAT', 'LON'],
-                separator : ';',
+                separator: ';',
                 delivery: 'download',
                 filename: 'GeoTendencias.csv'
             });
         });
-
     </script>
     <script src="./assets/js/upload.js"></script>
     <!--script src="./assets/js/csv.js"></script-->

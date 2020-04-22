@@ -4,7 +4,7 @@ function search(oneForm) { // Formata os primeiros dados para realizar a pesquis
     if (!oneForm.searchInput.value || oneForm.searchInput.value === '') {
         alert("Insira algum dado para ser buscado");
     } else {
-        let key = ''; // CHAVE GOOGLE API
+        let key = 'AIzaSyB6ltZPT86fAcXTFhbRUaa-S2gyR8ljbkQ'; // CHAVE GOOGLE API
         let value = oneForm.searchInput.value; // DADOS DO FORMULARIO PARA REALIZAR PESQUISA SEM FORMATAR
         let search = ''; // INICIA A VARIAVEL QUE RECEBERA AS INFORMAÇÕES PARA PESQUISA FORMATADAS
 
@@ -20,7 +20,7 @@ function search(oneForm) { // Formata os primeiros dados para realizar a pesquis
                 let ua = 0;
                 if (value.charAt(r) == "R" || value.charAt(r) == "r") {
                     u = i + 1;
-                    if (value.charAt(ru) == W "U" || value.charAt(ru) == "u") {
+                    if (value.charAt(ru) == "U" || value.charAt(ru) == "u") {
                         a = u + 1;
                         if (value.charAt(ua) == "A" || value.charAt(ua) == "a") {
                             i++;

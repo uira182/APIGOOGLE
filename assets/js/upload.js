@@ -1,23 +1,59 @@
+function formatEnd(end) {
+    let search = '';
+    for (let i = 0; i < end.length; i++) {
+        if (i == 0) {
+            let r = i;
+            let ru = 0;
+            let ua = 0;
+            if (end.charAt(r) == "R" || end.charAt(r) == "r") {
+                u = i + 1;
+                if (end.charAt(ru) == "U" || end.charAt(ru) == "u") {
+                    a = u + 1;
+                    if (end.charAt(ua) == "A" || end.charAt(ua) == "a") {
+                        i++;
+                    }
+                    i++;
+                }
+                search += "Rua";
+                i++;
+            }
+        }
+        if (end.charAt(i) != " ") { // SE NÃO ESTIVER VASIO O PONTO DE VERIFICAÇÃO
+
+            search += end.charAt(i); // ENVIA A LETRA PARA A VARIAVEL DE PESQUISA
+
+        } else { // SE TIVER ESPAÇO O PONTO DE VERIFICAÇÃO
+            search += '-'; // ENVIA O TRAÇO PARA A VARIAVEL DE PESQUISA
+        }
+    }
+    return search;
+}
+
 function Upload() {
     var fileUpload = document.getElementById("file_upload");
     var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;
     if (regex.test(fileUpload.value.toLowerCase())) {
-        if (typeof (FileReader) != "undefined") {
+        if (typeof(FileReader) != "undefined") {
             var reader = new FileReader();
-            reader.onload = function (e) {
+            reader.onload = function(e) {
                 var rows = e.target.result.split("\n");
-                for (var i = 1; i < 10; i++) {
-                    if (rows[i].split(",").length > 1) {
-                        var cells = rows[i].split(",");
-                        console.log(rows[i].split(",").length);
-                    }
+                //console.log(rows.length);
+                for (var i = 1; i < 2; i++) {
                     if (rows[i].split(";").length > 1) {
                         cells = rows[i].split(";");
-                        console.log(rows[i].split(";").length);
+                        //console.log(rows[i].split(";").length);
                     }
                     if (cells.length > 1) {
+
                         //console.log(cells[3] + " " + cells[4] + " " + cells[5]);
-                        searchCsv(cells[0], cells[1] + "-" + cells[2] + "-" + cells[3]);
+
+                        let origem = cells[5] + " " + cells[6];
+                        let destino = cells[10] + " " + cells[11];
+
+                        origem = formatEnd(origem);
+                        destino = formatEnd(destino);
+
+                        searchCsv(cells[1], origem, destino);
                     }
                 }
             }
@@ -30,82 +66,66 @@ function Upload() {
     }
 }
 
-function searchCsv(id, csv) { // Formata os primeiros dados para realizar a pesquisa.
-    if (!csv || csv === '') {
+function searchCsv(id, origem, destino) { // Formata os primeiros dados para realizar a pesquisa.
+    if (!origem || origem === '') {
         alert("Insira algum dado para ser buscado");
     } else {
-        let key = 'AIzaSyCpMbb74LSDVZ9JXSLqikQlI1H8vmZJ0QU'; // CHAVE GOOGLE API
-        let value = csv; // DADOS DO FORMULARIO PARA REALIZAR PESQUISA SEM FORMATAR
-        let search = ''; // INICIA A VARIAVEL QUE RECEBERA AS INFORMAÇÕES PARA PESQUISA FORMATADAS
-
-        // ESTE LOOP VAI LER TODOS OS DADOS QUE SERÃO PESQUISADOS E VAI REMOVER OS ESPAÇOS PARA COLOCAR -
-        // A API DO GOOGLE NÃO RECONHECE ESTAÇO ENTRE AS PALAVRAS POIS ESTA MESMA IRA NA URL DE PESQUISA
-        // UTILIZANDO UMA REQUISIÇÃO DO TIPO GET E POR ESTE MOTIVO A IMPORTANCIA DE TROCAR TODOS OS ESPAÇOS
-        // POR TRAÇOS: https://maps.googleapis.com/maps/api/geocode/json?address=exemplo-de-pesquisa-sem-espaço
-
-        for (let i = 0; i < value.length; i++) {
-            if (i == 0) {
-                let r = i;
-                let ru = 0;
-                let ua = 0;
-                if (value.charAt(r) == "R" || value.charAt(r) == "r") {
-                    u = i + 1;
-                    if (value.charAt(ru) == "U" || value.charAt(ru) == "u") {
-                        a = u + 1;
-                        if (value.charAt(ua) == "A" || value.charAt(ua) == "a") {
-                            i++;
-                        }
-                        i++;
-                    }
-                    search += "Rua:";
-                    i++;
-                }
-            }
-            if (value.charAt(i) != " ") { // SE NÃO ESTIVER VASIO O PONTO DE VERIFICAÇÃO
-
-                search += value.charAt(i); // ENVIA A LETRA PARA A VARIAVEL DE PESQUISA
-
-            } else { // SE TIVER ESPAÇO O PONTO DE VERIFICAÇÃO
-                search += '-'; // ENVIA O TRAÇO PARA A VARIAVEL DE PESQUISA
-            }
-        }
+        let key = 'AIzaSyAVEj8vqJ1zQpx96olOE9gC4N12hlC2fx4'; // CHAVE GOOGLE API
 
         // FORMATAÇÃO DA URL QUE VAI PARA A REQUISIÇÃO DE PESQUISA
-        console.log(search);
-        let url = new URL('https://maps.googleapis.com/maps/api/geocode/json?address=' + search + '&key=' + key);
+        //let url = new URL('https://maps.googleapis.com/maps/api/geocode/json?address=' + search + '&key=' + key);
+        let url = "maps.googleapis.com/maps/api/distancematrix/xml?units=imperial";
 
-        apiCsv(id, url); // ENVIA OS DADOS FORMATADOS E PRONTOS PARA A FUNÇÃO API
+        console.log(url);
+
+        apiCsv(id, url, origem, destino, key); // ENVIA OS DADOS FORMATADOS E PRONTOS PARA A FUNÇÃO API
     }
 
 }
 /* ******************************** REALIZAÇÃO DA PESQUISA ******************************* */
 
-function apiCsv(id, url) { // RECEBE OS DADOS FORMATADOS E IRA BUSCAR OS DADOS DA API
-
+function apiCsv(id, url, origem, destino, key) { // RECEBE OS DADOS FORMATADOS E IRA BUSCAR OS DADOS DA API
+    var postUrl = "https://" + url;
+    $.get(
+            postUrl, {
+                origins: origem,
+                destinations: destino,
+                key: key
+            },
+            function(data) {
+                console.log(data);
+            }
+        )
+        .fail(function(dados) {
+            alert("Erro! Não foi possivel gravar os dados no banco");
+        });
+    /*
     var xhr = new XMLHttpRequest(); // CRIA O OBJETO QUE REALIZARA A CONEXAO COM A API
     xhr.open("GET", url, true); // CONFIGURA A FORMA DE COMUNICAÇÃO GET E A URL E FORMA DE RETORNO DOS DADOS
     xhr.setRequestHeader("Accept", "application/json"); // FORMA DE RETORNO DE DADOS JSON
 
-    xhr.onreadystatechange = function () { // REALIZA A COMUNICAÇÃO
+    xhr.onreadystatechange = function() { // REALIZA A COMUNICAÇÃO
         // SE O RETORNO FOR CORRETO COM RESULTADO 200
         if ((xhr.readyState == 0 || xhr.readyState == 4)) {
             switch (xhr.status) {
                 case 200:
-
                     // EXECUTA A FUNÇÃO PREENCHE GOOGLE PARA PODER FORMATAR OS DADOS A SEREM EXIBIDOS
-                    preencheGoogleCsv(id, xhr.responseText);
+                    console.log(xhr.responseText);
+                    //preencheGoogleCsv(id, xhr.responseText);
                     break;
                 case 400:
                     alert('ERRO:400 - Informações incorretas');
                     break;
                 default:
                     alert('Erro - Inesperado');
-                    console.log(xhr.status);
+                    console.log(xhr.responseText);
                     break;
             }
         }
     };
     xhr.send();
+    */
+
 }
 
 /* *************************************************************************************** */
@@ -183,10 +203,10 @@ function clearInputCsv() { // FUNÇÃO PARA LIMPARA OS DADOS DE PESQUISA
 /* *************************************************************************************** */
 
 
-$(document).ready(function () {
-    $("#myBtn").click(function () {
+$(document).ready(function() {
+    $("#myBtn").click(function() {
         $("#myModal").modal();
-        $("#add_csv").click(function () {
+        $("#add_csv").click(function() {
             Upload();
         });
     });
