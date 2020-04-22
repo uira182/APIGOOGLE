@@ -23,7 +23,7 @@ function formatEnd(end) {
             search += end.charAt(i); // ENVIA A LETRA PARA A VARIAVEL DE PESQUISA
 
         } else { // SE TIVER ESPAÇO O PONTO DE VERIFICAÇÃO
-            search += '-'; // ENVIA O TRAÇO PARA A VARIAVEL DE PESQUISA
+            search += '+'; // ENVIA O TRAÇO PARA A VARIAVEL DE PESQUISA
         }
     }
     return search;
@@ -38,7 +38,7 @@ function Upload() {
             reader.onload = function(e) {
                 var rows = e.target.result.split("\n");
                 //console.log(rows.length);
-                for (var i = 1; i < 2; i++) {
+                for (var i = 1; i < rows.length; i++) {
                     if (rows[i].split(";").length > 1) {
                         cells = rows[i].split(";");
                         //console.log(rows[i].split(";").length);
@@ -47,13 +47,18 @@ function Upload() {
 
                         //console.log(cells[3] + " " + cells[4] + " " + cells[5]);
 
+                        //CEP
+                        //let origem = cells[7].replace('-', '');
+                        //let destino = cells[12].replace('-', '');
+
+                        //ENDEREÇO
                         let origem = cells[5] + " " + cells[6];
                         let destino = cells[10] + " " + cells[11];
 
                         origem = formatEnd(origem);
                         destino = formatEnd(destino);
 
-                        searchCsv(cells[1], origem, destino);
+                        searchCsv(cells[2], origem, destino);
                     }
                 }
             }
@@ -74,32 +79,18 @@ function searchCsv(id, origem, destino) { // Formata os primeiros dados para rea
 
         // FORMATAÇÃO DA URL QUE VAI PARA A REQUISIÇÃO DE PESQUISA
         //let url = new URL('https://maps.googleapis.com/maps/api/geocode/json?address=' + search + '&key=' + key);
-        let url = "maps.googleapis.com/maps/api/distancematrix/xml?units=imperial";
+        let url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + origem + "&destinations=" + destino + "&key=" + key;
 
         console.log(url);
 
-        apiCsv(id, url, origem, destino, key); // ENVIA OS DADOS FORMATADOS E PRONTOS PARA A FUNÇÃO API
+        apiCsv(id, url); // ENVIA OS DADOS FORMATADOS E PRONTOS PARA A FUNÇÃO API
     }
 
 }
 /* ******************************** REALIZAÇÃO DA PESQUISA ******************************* */
 
-function apiCsv(id, url, origem, destino, key) { // RECEBE OS DADOS FORMATADOS E IRA BUSCAR OS DADOS DA API
-    var postUrl = "https://" + url;
-    $.get(
-            postUrl, {
-                origins: origem,
-                destinations: destino,
-                key: key
-            },
-            function(data) {
-                console.log(data);
-            }
-        )
-        .fail(function(dados) {
-            alert("Erro! Não foi possivel gravar os dados no banco");
-        });
-    /*
+function apiCsv(id, url) { // RECEBE OS DADOS FORMATADOS E IRA BUSCAR OS DADOS DA API
+
     var xhr = new XMLHttpRequest(); // CRIA O OBJETO QUE REALIZARA A CONEXAO COM A API
     xhr.open("GET", url, true); // CONFIGURA A FORMA DE COMUNICAÇÃO GET E A URL E FORMA DE RETORNO DOS DADOS
     xhr.setRequestHeader("Accept", "application/json"); // FORMA DE RETORNO DE DADOS JSON
@@ -109,23 +100,22 @@ function apiCsv(id, url, origem, destino, key) { // RECEBE OS DADOS FORMATADOS E
         if ((xhr.readyState == 0 || xhr.readyState == 4)) {
             switch (xhr.status) {
                 case 200:
+                    //console.log(xhr.responseText);
+
                     // EXECUTA A FUNÇÃO PREENCHE GOOGLE PARA PODER FORMATAR OS DADOS A SEREM EXIBIDOS
-                    console.log(xhr.responseText);
-                    //preencheGoogleCsv(id, xhr.responseText);
+                    preencheGoogleCsv(id, xhr.responseText);
                     break;
                 case 400:
                     alert('ERRO:400 - Informações incorretas');
                     break;
                 default:
                     alert('Erro - Inesperado');
-                    console.log(xhr.responseText);
+                    //console.log(xhr.status);
                     break;
             }
         }
     };
     xhr.send();
-    */
-
 }
 
 /* *************************************************************************************** */
@@ -134,32 +124,47 @@ function apiCsv(id, url, origem, destino, key) { // RECEBE OS DADOS FORMATADOS E
 
 function preencheGoogleCsv(id, dados) { // RECEBE OS DADOS DA COMUNICAÇÃO PARA FORMATAR CORRETAMENTE
 
+    var origem = '';
+    var destino = '';
+    var distancia = '';
+    var duracao = '';
+
     let search = JSON.parse(dados); // CONVERTE OS DADOS EM TEXTO JSON PARA OBJETO JSON
 
-    //console.log(search);
-    // RECEBE A QUANTIDADE DE COMPONENTES RESULTANTES DA PESQUISA
-    let qd = search.results[0].address_components.length;
+    let status = search.rows[0].elements[0].status;
 
-    if (qd > 4) { // SE O A QUANTIDADE DE DADOS DOR FOR MAIOR QUE 4 
+    if (status == "OK") {
 
-        qd--; // DECREMENTA 1 PARA PODER ENCONTRAR A OPOSIÇÃO DO CEP
+        origem = search.origin_addresses[0];
+        destino = search.destination_addresses[0];
+        distancia = search.rows[0].elements[0].distance.text;
+        duracao = search.rows[0].elements[0].duration.text;
 
-        // ENVIA OS DADOS DO CEP PARA A VARIAVEL CEP
-        var cep = search.results[0].address_components[qd].short_name;
+        //console.log(search);
 
-    } else { // SE A QUANTIDADE FOR MENOR QUE 4
+        printListCsv(id, origem, destino, distancia, duracao);
 
-        // ENVIA OS DADOS DA POSIÇÃO ZERO PARA A VARIAVEL CEP
-        var cep = search.results[0].address_components[0].short_name;
+    } else {
 
+        if (search.origin_addresses[0] == '') {
+            origem = "Não encontrado origem";
+        } else {
+            origem = search.origin_addresses[0];
+        }
+
+        if (search.destination_addresses[0] == '') {
+            destino = "Não encontrado origem";
+        } else {
+            destino = search.destination_addresses[0];
+        }
+
+        distancia = "ERRO";
+        duracao = "ERRO";
+
+        //console.log(search);
+
+        printListCsv(id, origem, destino, distancia, duracao);
     }
-
-    var endereco = search.results[0].formatted_address; // CAPTURA OS DADOS DO ENDEREÇO
-    var lat = search.results[0].geometry.location.lat; // CAPTURA OS DADOS DE LATITUDE
-    var lng = search.results[0].geometry.location.lng; // CAPTURA OS DADOS DE LONGITUDE
-
-    // EXECUTA A FUNÇÃO PARA EXIBIR OS DADOS NA TELA
-    printListCsv(id, endereco, cep, lat, lng);
 
 }
 
