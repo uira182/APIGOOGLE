@@ -78,8 +78,31 @@
                     <form name="form_upload_csv">
                         <!-- Modal body -->
                         <div class="modal-body">
-                            <input class="form-cotrol-file" id="file_upload" type="file" accept=".csv" />
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="option" id="inlineRadio1" value="end" checked>
+                                        <label class="form-check-label" for="inlineRadio1">END</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="option" id="inlineRadio2" value="cep">
+                                        <label class="form-check-label" for="inlineRadio2">CEP</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="option" id="inlineRadio3" value="geo">
+                                        <label class="form-check-label" for="inlineRadio3">GEO</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <div class="row pb-4">
+                            <div class="col-12">
+                                <div class="col-12">
+                                    <input class="form-cotrol-file" id="file_upload" type="file" accept=".csv" />
+                                </div>
+                            </div>
+                        </div>
+
 
                         <!-- Modal footer -->
                         <div class="modal-footer">

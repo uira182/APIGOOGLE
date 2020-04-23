@@ -1,0 +1,53 @@
+//https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=Rua+ACEGUA+256+Rio+de+Janeiro|AVEN+AVENIDA+PREFEITO+DULCIDIO+CARDOSO+1300+Rio+de+Janeiro|AV+VICE+PRESIDENTE+JOSE+ALENCAR+1500+Rio+de+Janeiro|AV+DAS+AMERICAS+10101+Rio+de+Janeiro|EST+DOS+BANDEIRANTES+24114+Rio+de+Janeiro|R+POMPILIO+DE+ALBUQUERQUE+366+Rio+de+Janeiro|AV+ARMANDO+LOMBARDI+949+Rio+de+Janeiro|EST+MATRIZ,+DA+622+Rio+de+Janeiro|AV+DOS+MANANCIAIS+1420+Rio+de+Janeiro|R+CUBANCO+313+Rio+de+Janeiro|EST+DO+CAFUNDA+1757+Rio+de+Janeiro|AV+FERNANDO+MATTOS+71+Rio+de+Janeiro|AV+PRADO+JUNIOR+290+Rio+de+Janeiro|R+IVALDO+DE+AZAMBUJA+400+Rio+de+Janeiro|R+ARIAPO+310+Rio+de+Janeiro|AV+NIEMEYER+418+Rio+de+Janeiro|R+LOPES+QUINTAS+720+Rio+de+Janeiro|AV+DAS+AMERICAS+8585+Rio+de+Janeiro|R+PROFESSORA+SILVIA+BARBOSA+10+Rio+de+Janeiro|RUA+RUA++GUAPIMIRIM+142+Rio+de+Janeiro&destinations=Av.+Ayrton+Senna,+2300++Rio+de+Janeiro&key=AIzaSyAVEj8vqJ1zQpx96olOE9gC4N12hlC2fx4
+
+{
+    "destination_addresses": [
+        "R. Estados Unidos, 498 - Jardim Paulista, São Paulo - SP, 01427-000, Brasil"
+    ],
+    "origin_addresses": [
+        "Alameda Cel. Píres, 1067, Teodoro Sampaio - SP, 19280-000, Brasil",
+        "Pres. Prudente - SP, Brasil",
+        "Sandovalina, SP, 19250-000, Brasil"
+    ],
+    "rows": [{
+            "elements": [{
+                "distance": {
+                    "text": "649 km",
+                    "value": 649323
+                },
+                "duration": {
+                    "text": "7 horas 16 minutos",
+                    "value": 26132
+                },
+                "status": "OK"
+            }]
+        },
+        {
+            "elements": [{
+                "distance": {
+                    "text": "551 km",
+                    "value": 551454
+                },
+                "duration": {
+                    "text": "6 horas 7 minutos",
+                    "value": 22041
+                },
+                "status": "OK"
+            }]
+        },
+        {
+            "elements": [{
+                "distance": {
+                    "text": "601 km",
+                    "value": 600521
+                },
+                "duration": {
+                    "text": "6 horas 46 minutos",
+                    "value": 24354
+                },
+                "status": "OK"
+            }]
+        }
+    ],
+    "status": "OK"
+}
