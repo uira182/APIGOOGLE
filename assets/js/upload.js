@@ -156,7 +156,6 @@ function UploadCep() {
     let destino = ''; // INICIA UMA VARIAVEL PARA RECEBER O DESTINO DA PESQUISA
     let cont = 0; // INICIA UM CONTADOR QUE IRA CONTROLAR A QUANTIDADE DE PESQUISAS VAMOS REALIZAR POR REQUISIÇÃO
 
-    i
     if (regex.test(fileUpload.value.toLowerCase())) { // FORMATA O ARQUIVO E VERIFICA SE ESTA NA EXTENÇÃO CSV OU TXT
 
         if (typeof(FileReader) != "undefined") { // SE APOS A LEITURA FOR ENCONTRADO O ARQUIVO CORRETAMENTE
@@ -230,7 +229,6 @@ function UploadGeo() {
     let destino = ''; // INICIA UMA VARIAVEL PARA RECEBER O DESTINO DA PESQUISA
     let cont = 0; // INICIA UM CONTADOR QUE IRA CONTROLAR A QUANTIDADE DE PESQUISAS VAMOS REALIZAR POR REQUISIÇÃO
 
-    i
     if (regex.test(fileUpload.value.toLowerCase())) { // FORMATA O ARQUIVO E VERIFICA SE ESTA NA EXTENÇÃO CSV OU TXT
 
         if (typeof(FileReader) != "undefined") { // SE APOS A LEITURA FOR ENCONTRADO O ARQUIVO CORRETAMENTE
@@ -303,11 +301,11 @@ function searchCsv(id, origem, destino) { // Formata os primeiros dados para rea
 
     } else { // SE NÃO ESTIVER VASIO A ORIGEM E O DESTINO
 
-        let key = 'AIzaSyAVEj8vqJ1zQpx96olOE9gC4N12hlC2fx4'; // CHAVE GOOGLE API
+        let key = 'AIzaSyCLsOIrFTC-vnAgiBWtnX0ZUqPvc0G3qRk'; // CHAVE GOOGLE API
 
         let url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + origem + "&destinations=" + destino + "&key=" + key; // FORMATA O LINK DA API
-
-        apiCsv(id, url); // ENVIA OS DADOS FORMATADOS E PRONTOS PARA A FUNÇÃO API
+        console.log(url);
+        //apiCsv(id, url); // ENVIA OS DADOS FORMATADOS E PRONTOS PARA A FUNÇÃO API
 
     }
 
@@ -442,6 +440,30 @@ function clearInputCsv() { // FUNÇÃO PARA LIMPARA OS DADOS DE PESQUISA
 
 /* *************************************************************************************** */
 
+function OptionSel() {
+
+    let option = $("input[name='option']:checked").val(); // SELECIONA O INPUT RADIO PARA VERIFICAR O ELEMENTO SELECIONADO.
+
+    // IDENTIFICA O IMPUT SELECIONADO
+    switch (option) {
+        case 'end': // CASO ENDEREÇO
+            //END
+            UploadEnd(); // EXECUTA FUNÇÃO PARA PROSSEGUIR A PESQUISA POR ENDEREÇO
+            break; // FINALIZA
+        case 'cep': // CASO CEP
+            //CEP
+            UploadCep(); // EXECUTA FUNÇÃO PARA PROSSEGUIR A PESQUISA POR CEP
+            break; // FINALIZA
+        case 'geo': // CASO GEOLOCALIZAÇÃO
+            //GEO
+            UploadGeo(); // EXECUTA FUNÇÃO PARA PROSSEGUIR A PESQUISA POR GEOLOCALIZAÇÃO
+            break; // FINALIZA
+        default: // AVISO DE ERRO SE NÃO ENCONTRAR UMA OPÇÃO
+            alert("Erro! Não foi encontrado opção para busca."); // ALERTA
+            console.log("Erro! Não foi encontrado opção para busca."); // PRINT NO CONSOLE
+            break; // FINALIZA
+    }
+}
 /* ********************************** INICI DO SISTEMA *********************************** */
 
 $(document).ready(function() { // QUANDO A PAGINA FOR CARREGADA COMPLETAMENTE
