@@ -289,6 +289,7 @@ function UploadGeo() {
                             origem += "|" + cells[3].replace(",", ".") + "," + cells[4].replace(",", "."); // ATRIBUI O ENDEREÇO E A CIDADE A VARIAVEL ORIGEM FORMATANDO
                             id.push(cells[2]); // ATRIBUI O ID DA PESQUISA AO ARRAY ID
 
+
                             searchCsv(id, origem, destino); // CONTINUA A PESQUISA ENVIANDO OS IDS, ORIGENS E DESTINO
 
                             id = []; // ZERA O ARRAY PARA INICIAR NOVAMENTE PARA PREENCHER
@@ -328,11 +329,11 @@ function searchCsv(id, origem, destino) { // Formata os primeiros dados para rea
 
         let key = 'AIzaSyCLsOIrFTC-vnAgiBWtnX0ZUqPvc0G3qRk'; // CHAVE GOOGLE API
 
-        let url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + origem + "&destinations=" + destino + "&key=" + key; // FORMATA O LINK DA API
+        let url = "./assets/api.php"; // FORMATA O LINK DA API
 
         //console.log(url);
 
-        apiCsv(id, url); // ENVIA OS DADOS FORMATADOS E PRONTOS PARA A FUNÇÃO API
+        apiCsvPhp(id, url, origem, destino); // ENVIA OS DADOS FORMATADOS E PRONTOS PARA A FUNÇÃO API
 
     }
 
@@ -341,8 +342,26 @@ function searchCsv(id, origem, destino) { // Formata os primeiros dados para rea
 /* *************************************************************************************** */
 
 /* ******************************** REALIZAÇÃO DA PESQUISA ******************************* */
+function apiCsvPhp(id, url, origem, destino) { // RECEBE OS DADOS FORMATADOS E IRA BUSCAR OS DADOS DA API
+    var postUrl = url;
+    $.post(
+            postUrl, {
+                origem: origem,
+                destino: destino
+            },
+            function(data) {
+                //console.log(data);
+                preencheGoogleCsv(id, data);
+            }
+        ).done(function() {
+            $(".exibe").append("Segudo comando");
+        })
+        .fail(function(dados) {
+            alert("Erro! Não foi possivel gravar os dados no banco");
+        });
+}
 
-function apiCsv(id, url) { // RECEBE OS DADOS FORMATADOS E IRA BUSCAR OS DADOS DA API
+function apiCsvjs(id, url) { // RECEBE OS DADOS FORMATADOS E IRA BUSCAR OS DADOS DA API
 
     let xhr = new XMLHttpRequest(); // CRIA O OBJETO QUE REALIZARA A CONEXAO COM A API
     xhr.open("GET", url, true); // CONFIGURA A FORMA DE COMUNICAÇÃO GET E A URL E FORMA DE RETORNO DOS DADOS
@@ -385,9 +404,6 @@ function preencheGoogleCsv(id, dados) { // RECEBE OS DADOS DA COMUNICAÇÃO PARA
 
     let status = ''; // INICIA VARIAVEL QUE IRA IDENTIFICAR O STATUS DA PESQUISA
 
-    log = dateTimeProcess()
-    console.log(log + " - Iniciando o carregamento de dados da API");
-
     for (let i = 0; i < search.origin_addresses.length; i++) { // PERCORRER TODOS OS ENDEREÇOS PESQUISADOS
 
         status = search.rows[i].elements[0].status; // CAPTURA O STATUS DO ENDEREÇO PESQUISADO
@@ -429,8 +445,6 @@ function preencheGoogleCsv(id, dados) { // RECEBE OS DADOS DA COMUNICAÇÃO PARA
             printListCsv(id[i], origem, destino, distancia, duracao); // EXECUTA A FUNÇÃO QUE EXIBE NA TELA OS DADOS
         }
     }
-    log = dateTimeProcess()
-    console.log(log + " - Finalizado o carregamento de dados API");
 }
 
 /* *************************************************************************************** */
