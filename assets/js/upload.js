@@ -1,3 +1,28 @@
+function dateTimeProcess() {
+
+    // Obtém a data/hora atual
+    var data = new Date();
+
+    // Guarda cada pedaço em uma variável
+    var dia = data.getDate(); // 1-31
+    var dia_sem = data.getDay(); // 0-6 (zero=domingo)
+    var mes = data.getMonth(); // 0-11 (zero=janeiro)
+    var ano2 = data.getYear(); // 2 dígitos
+    var ano4 = data.getFullYear(); // 4 dígitos
+    var hora = data.getHours(); // 0-23
+    var min = data.getMinutes(); // 0-59
+    var seg = data.getSeconds(); // 0-59
+    var mseg = data.getMilliseconds(); // 0-999
+    var tz = data.getTimezoneOffset(); // em minutos
+
+    // Formata a data e a hora (note o mês + 1)
+    var str_data = dia + '/' + (mes + 1) + '/' + ano4;
+    var str_hora = hora + ':' + min + ':' + seg + ":" + mseg;
+
+    // Mostra o resultado
+    return (str_data + ' ' + str_hora);
+}
+
 /* ************************** SELELÇAO DO FORMATO DE PESQUISA **************************** */
 
 // VERIFICA SE FOI SELECIONADO REALIZAR BUSCA POR ENDEREÇO, CEP OU GEOLOCALIZAÇÃO.
@@ -166,7 +191,7 @@ function UploadCep() {
 
                 let rows = e.target.result.split("\n"); // COMEÇA A CRIAR AS LINHAS
                 let cells = ''; // INICA A VARIAVEL QUE RECEBERA AS COLUNAS;
-                let max = rows.length; // INICIA A VARIAVEL DE CONTROLE DE MAXIMO DE LINHAS
+                let max = 5; // INICIA A VARIAVEL DE CONTROLE DE MAXIMO DE LINHAS
                 let end = max - 1; // INICIA A VARIAVEL DE CONTROLE PARA FINALIZAR A COLETA DE ENDEREÇOS POR REQUISIÇÃO
                 let ends = 20 - 1; // INICIA A VARIAVEL DE CONTROLE PARA QUANTIDADE DE ENDEREÇOS POR REQUISIÇÃO
 
@@ -304,8 +329,10 @@ function searchCsv(id, origem, destino) { // Formata os primeiros dados para rea
         let key = 'AIzaSyCLsOIrFTC-vnAgiBWtnX0ZUqPvc0G3qRk'; // CHAVE GOOGLE API
 
         let url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + origem + "&destinations=" + destino + "&key=" + key; // FORMATA O LINK DA API
-        console.log(url);
-        //apiCsv(id, url); // ENVIA OS DADOS FORMATADOS E PRONTOS PARA A FUNÇÃO API
+
+        //console.log(url);
+
+        apiCsv(id, url); // ENVIA OS DADOS FORMATADOS E PRONTOS PARA A FUNÇÃO API
 
     }
 
@@ -335,7 +362,7 @@ function apiCsv(id, url) { // RECEBE OS DADOS FORMATADOS E IRA BUSCAR OS DADOS D
                     break;
                 default:
                     alert('Erro - Inesperado');
-                    console.log(xhr.status);
+                    //console.log(xhr.status);
                     break;
             }
         }
@@ -348,7 +375,7 @@ function apiCsv(id, url) { // RECEBE OS DADOS FORMATADOS E IRA BUSCAR OS DADOS D
 /* **************************** FORMATA OS DADOS PARA EXIBIR ***************************** */
 
 function preencheGoogleCsv(id, dados) { // RECEBE OS DADOS DA COMUNICAÇÃO PARA FORMATAR CORRETAMENTE
-
+    let log = '';
     let origem = ''; // INICIA VARIAVEL QUE IRA RECEBER ORIGEM A SER EXIBIDO
     let destino = ''; // INICIA VARIAVEL QUE IRA RECEBER DESTIDO A SER EXIBIDO
     let distancia = ''; // INICIA VARIAVEL QUE IRA RECEBER A DISTANCIA A SER EXIBIDA
@@ -357,6 +384,9 @@ function preencheGoogleCsv(id, dados) { // RECEBE OS DADOS DA COMUNICAÇÃO PARA
     let search = JSON.parse(dados); // CONVERTE OS DADOS EM TEXTO JSON PARA OBJETO JSON
 
     let status = ''; // INICIA VARIAVEL QUE IRA IDENTIFICAR O STATUS DA PESQUISA
+
+    log = dateTimeProcess()
+    console.log(log + " - Iniciando o carregamento de dados da API");
 
     for (let i = 0; i < search.origin_addresses.length; i++) { // PERCORRER TODOS OS ENDEREÇOS PESQUISADOS
 
@@ -399,6 +429,8 @@ function preencheGoogleCsv(id, dados) { // RECEBE OS DADOS DA COMUNICAÇÃO PARA
             printListCsv(id[i], origem, destino, distancia, duracao); // EXECUTA A FUNÇÃO QUE EXIBE NA TELA OS DADOS
         }
     }
+    log = dateTimeProcess()
+    console.log(log + " - Finalizado o carregamento de dados API");
 }
 
 /* *************************************************************************************** */
@@ -427,15 +459,18 @@ function printListCsv(id, endereco, cep, lat, lng) { // EXIBE OS DADOS FORMATADO
 
     tableSearch.innerHTML += htmlTable; // INSERE OS DADOS NA TABELA
 
-    clearInputCsv(); // EXECUTA A FUNÇÃO QUE LIMPARA OS DADOS DA PESQUISA PÓS EXIBIR
+    clearInputCsv(id); // EXECUTA A FUNÇÃO QUE LIMPARA OS DADOS DA PESQUISA PÓS EXIBIR
 }
 
 /* *************************************************************************************** */
 
 /* ***************************** LIMPA OS DADOS DE PESQUISA ****************************** */
 
-function clearInputCsv() { // FUNÇÃO PARA LIMPARA OS DADOS DE PESQUISA
-    document.getElementById("srcInp").value = ''; // LIMPA OS DADOS DO IMPUT
+function clearInputCsv(id) { // FUNÇÃO PARA LIMPARA OS DADOS DE PESQUISA
+
+    log = dateTimeProcess()
+    console.log(log + " " + id + " - Inserido a tabela");
+    //document.getElementById("srcInp").value = ''; // LIMPA OS DADOS DO IMPUT
 }
 
 /* *************************************************************************************** */

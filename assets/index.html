@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="./assets/css/style.css">
     <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="./assets/fontawesome/css/all.min.css">
-    <script src="./assets/js/jquery-2.2.0.min.js"></script>
     <script src="./assets/js/jquery/jquery.min.js"></script>
     <script src="./assets/fontawesome/js/all.js"></script>
 </head>
@@ -19,7 +18,7 @@
         <div class="row pt-2 pb-2 m-0 p-0">
             <div class="col-md-12">
                 <p class="text-center text-white h3">
-                    <img src="./assets/img/tendencias.svg" width="90" alt="Tendencias"> SCRT - Sistema de Calculo de Rotas
+                    <img src="./assets/img/tendencias.svg" width="90" alt="Tendencias"> Georreferenciamento
                 </p>
             </div>
         </div>
@@ -30,7 +29,8 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">Pesquisar</span>
                         </div>
-                        <input id="srcInp" name="searchInput" type="text" class="form-control" placeholder="Logradouro, CEP, Lat e Log ou Empresa">
+                        <input id="srcInp" name="searchInput" type="text" class="form-control"
+                            placeholder="Logradouro, CEP, Lat e Log ou Empresa">
                         <div class="input-group-append">
                             <button name="searchButton" class="btn btn-success" type="submit">
                                 <i class="fa fa-map-marker-alt"></i>
@@ -52,10 +52,10 @@
                     <thead>
                         <tr>
                             <th class="text-left">Id</th>
-                            <th class="text-left">Origem</th>
-                            <th class="text-left">Destino</th>
-                            <th class="text-left">Distancia</th>
-                            <th class="text-left">Duração</th>
+                            <th class="text-left">Endereço</th>
+                            <th class="text-left">CEP</th>
+                            <th class="text-left">Latitude</th>
+                            <th class="text-left">Longitude</th>
                             <th class="text-center">
                                 <i class="fa fa-trash"></i>
                             </th>
@@ -78,29 +78,7 @@
                     <form name="form_upload_csv">
                         <!-- Modal body -->
                         <div class="modal-body">
-                            <div class="row pb-4">
-                                <div class="col-12 text-center">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="option" id="inlineRadio1" value="end" checked>
-                                        <label class="form-check-label" for="inlineRadio1">END</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="option" id="inlineRadio2" value="cep">
-                                        <label class="form-check-label" for="inlineRadio2">CEP</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="option" id="inlineRadio3" value="geo">
-                                        <label class="form-check-label" for="inlineRadio3">GEO</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row pb-3">
-                                <div class="col-12">
-                                    <div class="col-12">
-                                        <input class="form-cotrol-file" id="file_upload" type="file" accept=".csv" />
-                                    </div>
-                                </div>
-                            </div>
+                            <input class="form-cotrol-file" id="file_upload" type="file" accept=".csv" />
                         </div>
 
                         <!-- Modal footer -->
@@ -116,14 +94,15 @@
     <script src="./assets/js/jquery-2.2.0.min.js"></script>
     <script src="./assets/js/jquery.TableCSVExport.js"></script>
     <script>
-        $("#dCsv").click(function() {
+        $("#dCsv").click(function () {
             $('#listGeo').TableCSVExport({
-                header: ['Id_Cliente', 'Origem', 'Destino', 'Distancia', 'Duração'],
-                separator: ';',
+                header: ['Id', 'End', 'CEP', 'LAT', 'LON'],
+                separator : ';',
                 delivery: 'download',
                 filename: 'GeoTendencias.csv'
             });
         });
+
     </script>
     <script src="./assets/js/upload.js"></script>
     <!--script src="./assets/js/csv.js"></script-->
