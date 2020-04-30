@@ -139,25 +139,25 @@ function formatEnd(end) { // RECEBE O ENDEREÇO E SUBSTITUI OS ESPAÇOS POR +
     let search = ''; // INICIO DE UMA VARIAVEL PARA RECEBER O ENDEREÇO FORMATADO
 
     for (let i = 0; i < end.length; i++) { // PERCORRE TODOS OS ESPAÇOS DA VARIAVEL end
-        /*
-            if (i == 0) {
-                let r = i;
-                let ru = 0;
-                let ua = 0;
-                if (end.charAt(r) == "R" || end.charAt(r) == "r") {
-                    u = i + 1;
-                    if (end.charAt(ru) == "U" || end.charAt(ru) == "u") {
-                        a = u + 1;
-                        if (end.charAt(ua) == "A" || end.charAt(ua) == "a") {
-                            i++;
-                        }
+
+        if (i == 0) {
+            let r = i;
+            let ru = 0;
+            let ua = 0;
+            if (end.charAt(r) == "R" || end.charAt(r) == "r") {
+                u = i + 1;
+                if (end.charAt(ru) == "U" || end.charAt(ru) == "u") {
+                    a = u + 1;
+                    if (end.charAt(ua) == "A" || end.charAt(ua) == "a") {
                         i++;
                     }
-                    search += "Rua";
                     i++;
                 }
+                search += "Rua";
+                i++;
             }
-        */
+        }
+
         if (end.charAt(i) != " ") { // SE NÃO ESTIVER VASIO O PONTO DE VERIFICAÇÃO
 
             search += end.charAt(i); // ENVIA A LETRA PARA A VARIAVEL DE PESQUISA
@@ -482,8 +482,8 @@ function printListCsv(id, endereco, cep, lat, lng) { // EXIBE OS DADOS FORMATADO
 
 function clearInputCsv(id) { // FUNÇÃO PARA LIMPARA OS DADOS DE PESQUISA
 
-    log = dateTimeProcess()
-    console.log(log + " " + id + " - Inserido a tabela");
+    //log = dateTimeProcess()
+    //console.log(log + " " + id + " - Inserido a tabela");
     //document.getElementById("srcInp").value = ''; // LIMPA OS DADOS DO IMPUT
 }
 
